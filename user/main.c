@@ -102,8 +102,8 @@ void TIM2_IRQHandler(void){
 		if (Out > 100 ) Out = 100;
 		else if (Out < -100 ) Out = -100;
 
-		if (errint > 300) errint = 300;
-		else if (errint < -300) errint = -300;
+		if (errint > 500) errint = 500;
+		else if (errint < -500) errint = -500;
 
 		if ((Actual >=-2 && Actual<=2 && Target == 0) || (Actual-Target<=3 && Actual-Target>=-3 && State == 1))
 		{
