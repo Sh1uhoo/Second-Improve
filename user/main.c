@@ -6,12 +6,13 @@
 #include "Serial.h"
 #include "Key.h"
 #include <string.h>
+#include <math.h>
 
 float Target,Actual,Out;
-float kp[2]={0.3,0.07},ki[2]={0.1,0.01},kd[2]={0.05,0.001};
+float kp[2]={0.3,0.07},ki[2]={0.27,0.01},kd[2]={0.05,0.001};
 float err0,err1,errint;
 uint8_t State=0;
-static int8_t Speed=0;
+static int16_t Speed=0;
 static int8_t loc=0;
 
 int main(void)
@@ -91,31 +92,35 @@ void TIM2_IRQHandler(void){
 		
 		
 		Actual = Motor_Get();
-		
-		
+
+		float C = State ? 1 / (0.05 * fabs(err0) + 1) : 1;
+
 		err1=err0;
 		err0=Target - Actual;
 		errint += err0;
 		
-		Out = kp[State]*err0 + ki[State]*errint + kd[State] * (err0-err1);
+		Out = kp[State]*err0 + C * ki[State]*errint + kd[State] * (err0-err1);
 		
 		if (Out > 100 ) Out = 100;
 		else if (Out < -100 ) Out = -100;
 
-		if (errint > 500) errint = 500;
-		else if (errint < -500) errint = -500;
+		if (State == 0)
+		{
+			if (errint > 700) errint = 700;
+			else if (errint < -700) errint = -700;
+		}
 
-		if ((Actual >=-2 && Actual<=2 && Target == 0) || (Actual-Target<=3 && Actual-Target>=-3 && State == 1))
+		if ((Actual >=-2 && Actual<=2 && Target == 0) || (Actual-Target<=10 && Actual-Target>=-10 && State == 1))
 		{
 			Out = 0;
 			errint = 0;
 		}
-		else if (err1 == err0 && State == 1) Out*=2.2;
 
 		Motor_Setspeed(Out);
 		
 		
-		printf("%f,%f,%f,%d\n",Actual,Out,Target,Encoder_Get());
+		printf("%f,%f,%f,%d,%f\n",Actual,Out,Target,Encoder_Get(),errint);
+		
 		TIM_ClearITPendingBit(TIM2 , TIM_IT_Update);
 	}
 }

@@ -23,10 +23,12 @@ uint8_t Key_GetNum(void)
 		while (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0)==0);
 		Delay_ms(5);
 		Key=1;
-		if (Key == 0)
-			TIM_SetCounter(TIM3 , 0);
+			
 		if (Key == 1)
+		{
 			TIM_SetCounter(TIM4 , 0);
+			TIM_SetCounter(TIM3 , 0);
+		}
 	}
 
 	return Key;
