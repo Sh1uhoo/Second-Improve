@@ -31,7 +31,8 @@ int main(void)
 			
 		if (Serial_GetRxFlag() == 1)
 		{
-			OLED_Clear();
+			OLED_ShowString(1,5," ");
+			OLED_ShowString(2,1,"      ");
 			Speed = 0;
 			int8_t k=1;
 			
