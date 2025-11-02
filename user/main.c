@@ -5,6 +5,7 @@
 #include "Motor.h"
 #include "Serial.h"
 #include "Key.h"
+#include <string.h>
 
 float Target,Actual,Out;
 float kp[2]={0.3,0.07},ki[2]={0.1,0.01},kd[2]={0.05,0.001};
@@ -26,28 +27,43 @@ int main(void)
 	{
 		
 		
-		State = Key_GetNum();
+		State = Key_GetNum() ? 1 - State : State;
 			
 		if (Serial_GetRxFlag() == 1)
 		{
-			OLED_Clear();
+			OLED_ShowString(1,5," ");
+			OLED_ShowString(2,1,"      ");
 			Speed = 0;
 			int8_t k=1;
 			
 			uint8_t p=0;
 			
-			if (Serial_RxData[0] == '-') 
+			if (strcmp(Serial_RxData,"fun1") == 0)
 			{
-				p++;
-				k=-1;
+				State = 0;
+				Serial_RxFlag = 0;
+				
 			}
+			else if (strcmp(Serial_RxData,"fun2") == 0)
+			{	
+				State = 1;
+				Serial_RxFlag = 0;
+			}
+			else
+			{
+				if (Serial_RxData[0] == '-') 
+				{
+					p++;
+					k=-1;
+				}
 			
-			while (Serial_RxData[p] != '\0')
-			{
-				Speed=Speed*10+(Serial_RxData[p++]-'0');
-			}
+				while (Serial_RxData[p] != '\0')
+				{
+					Speed=Speed*10+(Serial_RxData[p++]-'0');
+				}
 			
 			Speed*=k;
+			}
 			
 			
 			
@@ -57,6 +73,7 @@ int main(void)
 		
 		OLED_ShowString(1,1,"Func");
 		OLED_ShowNum(1,5,State+1,1);
+		OLED_ShowString(2,1,Serial_RxData);
 		
 	}
 	
