@@ -73,8 +73,8 @@ int main(void)
 		
 		OLED_ShowString(1,1,"Func");
 		OLED_ShowNum(1,5,State+1,1);
-		OLED_ShowString(2,1,Serial_RxData);
-		
+		if (State == 0)
+		    OLED_ShowNum(2,1,Speed,3);
 	}
 	
 }
