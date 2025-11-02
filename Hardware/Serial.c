@@ -110,16 +110,6 @@ void USART1_IRQHandler(void)
 			}
 		}
 		
-		else if (RxState == 2)
-		{
-			if (RxData == '%')
-			{
-				RxState = 0;
-				Serial_RxData[RxP++]='\0';
-				Serial_RxFlag = 1;
-			}
-		}
-		
 		USART_ClearITPendingBit(USART1,USART_IT_RXNE);
 	}
 }

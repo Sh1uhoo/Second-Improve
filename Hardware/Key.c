@@ -12,17 +12,17 @@ void Key_Init(void)
 	
 }
 
-uint8_t Key=0;
+
 
 uint8_t Key_GetNum(void)
 {
-	
+	uint8_t Key=0;
 	if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0)==0)
 	{
 		Delay_ms(5);
 		while (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0)==0);
 		Delay_ms(5);
-		Key=1-Key;
+		Key=1;
 		if (Key == 0)
 			TIM_SetCounter(TIM3 , 0);
 		if (Key == 1)
