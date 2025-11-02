@@ -11,7 +11,7 @@ float Target,Actual,Out;
 float kp[2]={0.3,0.07},ki[2]={0.1,0.01},kd[2]={0.05,0.001};
 float err0,err1,errint;
 uint8_t State=0;
-static int8_t Speed=0;
+static int16_t Speed=0;
 static int8_t loc=0;
 
 int main(void)
