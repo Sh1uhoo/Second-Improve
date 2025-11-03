@@ -71,7 +71,7 @@ int main(void)
 			Serial_RxFlag = 0;
 		}
 		
-		
+		printf("%f,%f,%f,%f\n",Actual,Out,Target,errint);
 		OLED_ShowString(1,1,"Func");
 		OLED_ShowNum(1,5,State+1,1);
 		if (State == 0)
@@ -131,7 +131,7 @@ void TIM2_IRQHandler(void){
 
 		Motor_Setspeed(Out);
 		
-		printf("%f,%f,%f,%f\n",Actual,Out,Target,errint);
+		
 		
 		TIM_ClearITPendingBit(TIM2 , TIM_IT_Update);
 	}
