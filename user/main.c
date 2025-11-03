@@ -29,6 +29,14 @@ int main(void)
 		
 		State = Key_GetNum() ? 1 - State : State;
 			
+		if (Key_GetNum() == 1)
+		{
+			OLED_ShowString(2,1,"      ");
+			Speed = 0;
+			TIM_SetCounter(TIM3 , 0);
+			TIM_SetCounter(TIM4 , 0);
+		}
+
 		if (Serial_GetRxFlag() == 1)
 		{
 			OLED_ShowString(1,5," ");
@@ -42,12 +50,16 @@ int main(void)
 			{
 				State = 0;
 				Serial_RxFlag = 0;
+				TIM_SetCounter(TIM3 , 0);
+			    TIM_SetCounter(TIM4 , 0);
 				
 			}
 			else if (strcmp(Serial_RxData,"fun2") == 0)
 			{	
 				State = 1;
 				Serial_RxFlag = 0;
+				TIM_SetCounter(TIM3 , 0);
+				TIM_SetCounter(TIM4 , 0);
 			}
 			else
 			{
@@ -70,11 +82,12 @@ int main(void)
 			Serial_RxFlag = 0;
 		}
 		
-		
+
 		OLED_ShowString(1,1,"Func");
 		OLED_ShowNum(1,5,State+1,1);
+			
 		if (State == 0)
-		    OLED_ShowNum(2,1,Speed,3);
+		    	OLED_ShowNum(2,1,Speed,3);
 	}
 	
 }
